@@ -1,3 +1,4 @@
+from data.user import User
 from selene import have, browser
 import os
 import tests
@@ -31,8 +32,8 @@ class RegistrationPage:
 
     def data_birth(self, day, month, year):
         browser.element('#dateOfBirthInput').click()
-        browser.element('.react-datepicker__month-select').type(month).click()
-        browser.element('.react-datepicker__year-select').type(year).click()
+        browser.element('.react-datepicker__month-select').type(month)
+        browser.element('.react-datepicker__year-select').type(year)
         browser.element(
             f'.react-datepicker__day--0{day}:not(.react-datepicker__day--outside-month)').click()
         return self
@@ -56,7 +57,7 @@ class RegistrationPage:
         browser.element('#currentAddress').type(address)
         return self
 
-    def choice_state(self,):
+    def choice_state(self, ):
         browser.element('#state').click().element('#react-select-3-option-1').click()
         return self
 
@@ -68,18 +69,34 @@ class RegistrationPage:
         browser.element('#submit').click()
         return self
 
-    def should_user(self, full_name, email, gender, number, date, subjects, hobbies, file, address, state):
+    def register_user(self, user: User):
+        self.fill_name(user.name)
+        self.fill_last_name(user.last_name)
+        self.fill_email(user.email)
+        self.fill_user_number(user.number)
+        self.fill_gender(user.gender)
+        self.fill_user_number(user.picture)
+        self.data_birth(user.day, user.month, user.year)
+        self.subjects(user.subjects)
+        self.hobbies(user.hobbies)
+        self.upload_picture(user.picture)
+        self.fill_user_address(user.address)
+        self.choice_state()
+        self.choice_city()
+        return self
+
+    def should_user(self, user: User):
         browser.element('.table').all('td').even.should(
             have.exact_texts(
-                full_name,
-                email,
-                gender,
-                number,
-                date,
-                subjects,
-                hobbies,
-                file,
-                address,
-                state
+                f'{user.name} {user.last_name}',
+                user.email,
+                user.gender,
+                user.number,
+                f'{user.day} {user.month},{user.year}',
+                user.subjects,
+                user.hobbies,
+                user.picture,
+                user.address,
+                f'{user.state} {user.city}'
             )
         )
