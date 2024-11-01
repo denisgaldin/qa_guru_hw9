@@ -5,9 +5,9 @@ def test_registration():
     registration_page = RegistrationPage()
 
     registration_page.open() \
-        .fill_first_name('Yasha') \
-        .fill_last_name('Kramarenko') \
-        .fill_email('yashaka@gmail.com') \
+        .fill_first_name('Denis') \
+        .fill_last_name('Galdin') \
+        .fill_email('testqa@mail.ru') \
         .select_gender('Male') \
         .fill_user_number('9009009000') \
         .select_date_of_birth(27, 8, 1997) \
@@ -22,8 +22,8 @@ def test_registration():
         .submit()
 
     registration_page.should_have_registered(
-        student_name='Yasha Kramarenko',
-        student_email='yashaka@gmail.com',
+        student_name='Denis Galdin',
+        student_email='testqa@mail.ru',
         gender='Male',
         mobile='9009009000',
         dob='27 September,1997',

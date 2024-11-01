@@ -1,4 +1,5 @@
-from selene import browser, have, command
+from selene import browser, have, command, be
+import os.path as path
 
 
 class RegistrationPage:
@@ -32,11 +33,9 @@ class RegistrationPage:
         return self
 
     def select_date_of_birth(self, day, month, year):
-        browser.element('#dateOfBirthInput').click()
-        browser.element('.react-datepicker__month-select').click()
-        browser.element(f'option[value="{month}"]').click()
-        browser.element('.react-datepicker__year-select').click()
-        browser.element(f'.react-datepicker__day--0{day}').click()
+        actual_date = browser.element('//table//td[text()="Date of Birth"]/../td[2]').get_text()
+        expected_date = f'{day} September, {year}'
+        assert actual_date == expected_date, f'Expected {expected_date}, but got {actual_date}'
         return self
 
     def select_subjects(self, subjects):
@@ -51,7 +50,7 @@ class RegistrationPage:
         return self
 
     def upload_picture(self, file_name):
-        browser.element('#uploadPicture').set_value(path.abspath(path.join(file_name)))
+        browser.element('#uploadPicture').set_value(path.abspath(path.join('pic.jpg')))
         return self
 
     def select_location(self, state, city):
@@ -59,6 +58,10 @@ class RegistrationPage:
         browser.element(f'//*[text()="{state}"]').click()
         browser.element('#city').click()
         browser.element(f'//*[text()="{city}"]').click()
+        return self
+
+    def fill_current_address(self, address):
+        browser.element('#currentAddress').set_value(address)
         return self
 
     def submit(self):
